@@ -1,0 +1,53 @@
+Certainly! This use case involves a process triggered by the submission of a ticket through a platform integrated with the Express product. The purpose is to create a maintenance window in Zabbix for a list of servers specified in the ticket. Here's an overview of the steps involved:
+
+ 
+
+1. Ticket Submission and Process Triggered:
+   - Users submit a ticket through a platform integrated with the Express product.
+   - The ticket can be submitted using a template or a CSV file containing server names, server IDs, or group IDs.
+   - Keep track of the servers for comparison at the end of the process.
+
+ 
+
+2. Authentication into Zabbix API:
+   - Obtain the Zabbix API token required for subsequent API calls.
+
+ 
+
+3. Confirm Servers:
+   - If server names are provided in the ticket, the process needs to find their associated host IDs.
+     - Iterate over each line of the CSV file to retrieve each server name.
+     - Use the Zabbix API token to make a "host.get" API call for each server.
+     - Extract the host ID of each server and add it to a new list.
+   - If server IDs or data usable by other processes are available, this step can be skipped.
+
+ 
+
+4. Create a New Maintenance Window:
+   - Use the "maintenance.create" API call in Zabbix to create a new maintenance window.
+   - Specify a name for the maintenance window and define its timeframe.
+
+ 
+
+5. Add All Hosts/Groups to the Maintenance Window:
+   - Use the "maintenance.addhost" API call to add all the hosts or a group of hosts to the maintenance window.
+   - If the list of host IDs is too large to be ingested in a single API call, use a loop to add them in batches.
+   - If a group ID is provided, it can be used to add all hosts in the group with a single API call.
+
+ 
+
+6. Verify Maintenance Window and Hosts:
+   - Perform a "maintenance.get" API call to retrieve information about the created maintenance window.
+   - Use the returned data to create a secondary list of confirmed servers.
+   - Compare the initial list of servers with the verified list obtained from the maintenance window.
+   - If any servers are not found in the maintenance window, create a new list of missing servers.
+
+ 
+
+7. User Feedback:
+   - Inform the user, using the original ticket, that the maintenance window has been enacted along with any additional relevant information.
+   - Post to the initial ticket the list of differences between the specified servers and the servers actually included in the maintenance window, if any.
+
+ 
+
+This use case aims to automate the process of creating a maintenance window in Zabbix based on the servers provided in a ticket submitted through an integrated platform. It involves authentication, server confirmation, maintenance window creation, adding hosts to the window, verification of the maintenance window and hosts, and providing feedback to the user via the ticket.
