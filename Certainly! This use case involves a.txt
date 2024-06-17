@@ -1,5 +1,5 @@
 Certainly! This use case involves a process triggered by the submission of a ticket through a platform integrated with the Express product. The purpose is to create a maintenance window in Zabbix for a list of servers specified in the ticket. Here's an overview of the steps involved:
-
+test
  
 
 1. Ticket Submission and Process Triggered:
